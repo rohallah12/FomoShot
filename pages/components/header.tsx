@@ -17,7 +17,7 @@
 import { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import avatar from "../../assets/logos/ethereum-eth.svg";
-import logo from "../../assets/logos/logo.png";
+import logo from "../../assets/logos/logo.svg";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -48,12 +48,10 @@ export default function Header() {
           <div className="flex px-2 lg:px-0 items-center">
             <div className="inline-block flex-shrink-0 items-center">
               <Link href="/" className="font-black text-5xl">
-                <Image src={logo} className="w-48 h-20" alt="logo" />
+                <Image src={logo} alt="logo" className="w-38 h-20 md:w-48" />
               </Link>
             </div>
           </div>
-
-          
           <div className="lg:ml-4 lg:flex lg:items-center">
             <ConnectButton></ConnectButton>
             {/* Profile dropdown */}
@@ -61,7 +59,6 @@ export default function Header() {
               <div>
                 <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                   <span className="sr-only">Open user menu</span>
-
                 </Menu.Button>
               </div>
               <Transition
