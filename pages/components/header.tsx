@@ -17,7 +17,7 @@
 import { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import avatar from "../../assets/logos/ethereum-eth.svg";
-import logo from "../../assets/logos/logo.svg";
+import logo from "../../assets/logos/logo2.svg";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -48,7 +48,7 @@ export default function Header() {
           <div className="flex px-2 lg:px-0 items-center">
             <div className="inline-block flex-shrink-0 items-center">
               <Link href="/" className="font-black text-5xl">
-                <Image src={logo} alt="logo" className="w-38 h-20 md:w-48" />
+                <Image src={logo} alt="logo" className="w-40 h-full md:w-64 bg-white" />
               </Link>
             </div>
           </div>
