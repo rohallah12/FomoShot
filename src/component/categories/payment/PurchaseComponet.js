@@ -22,7 +22,7 @@ const PurchaseComponet = (props) => {
   const [mainPrice, setMainPrice] = useState(600000);
 
   //socket.io
-  // const socket = io.connect(`wss://fomo.herokuapp.com`); //127.0.0.1:8000  //fomo.herokuapp.com
+  const socket = io.connect(`wss://fomo.herokuapp.com`); //127.0.0.1:8000  //fomo.herokuapp.com
 
   const getGameContract = () => {
     const temporalProvider = new ethers.providers.Web3Provider(window.ethereum);
@@ -103,7 +103,7 @@ const PurchaseComponet = (props) => {
           nonce: 105 || undefined,
         });
         await buy.wait();
-        // socket.emit("message", props.signerAddress);
+        socket.emit("message", props.signerAddress);
       } else {
         const affcode = 100000000000;
 
@@ -112,7 +112,7 @@ const PurchaseComponet = (props) => {
           nonce: 105 || undefined,
         });
         await buy.wait();
-        // socket.emit("message", props.signerAddress);
+        socket.emit("message", props.signerAddress);
       }
 
       props.setNotifystate(true);
@@ -182,7 +182,7 @@ const PurchaseComponet = (props) => {
           }
         );
         await usev.wait();
-        // socket.emit("message", props.signerAddress);
+        socket.emit("message", props.signerAddress);
       } else {
         const affcode = 100000000000;
         const usev = await Contract.reLoadXid(
@@ -195,7 +195,7 @@ const PurchaseComponet = (props) => {
           }
         );
         await usev.wait();
-        // socket.emit("message", props.signerAddress);
+        socket.emit("message", props.signerAddress);
       }
       props.setNotifystate(true);
       props.setNotifyMessage(
@@ -221,7 +221,7 @@ const PurchaseComponet = (props) => {
   return (
     <div className="bg-[#212529] font-fomofont w-[46vw] sm:w-full p-4 sm:p-3 rounded-b-2xl rounded-r-2xl">
       <p className="text-base my-1 font-light mb-5 font-fomofont">
-        Purchases of 1 key for {mainPrice} SOS{" "}
+        Purchases of 1 key for {parseInt(mainPrice).toFixed(2)} SOS{" "}
       </p>
 
       <div className="flex ">

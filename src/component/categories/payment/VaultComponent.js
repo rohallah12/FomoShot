@@ -32,7 +32,7 @@ export default function VaultComponet(props) {
 
   useEffect(() => {
     getapiatabnb();
-  }, []);
+  }, [props.time]);
 
   return (
     <div className="bg-[#212529] w-[46vw] sm:w-[95vw] font-fomofont p-4 rounded-b-2xl rounded-r-2xl">
@@ -46,9 +46,9 @@ export default function VaultComponet(props) {
           <div className="flex flex-col justify-between items-center sm:text-[1.4rem]">
             <h2 className="flex items-center text-[1.75rem] font-normal font-fomofont sm:text-[1.4rem]">
               {props.signerAddress ? (
-                <>{(23 / 100) * props?.currentPot} SOS</>
+                <>{parseInt((23 / 100) * props?.currentPot).toFixed(2)} SOS</>
               ) : (
-                <>0.0000 SOS</>
+                <>0.00 SOS</>
               )}
             </h2>
           </div>
@@ -61,9 +61,9 @@ export default function VaultComponet(props) {
           <div className="flex flex-col justify-between items-center sm:text-[1.4rem]">
             <h2 className="flex items-center text-[1.75rem] font-normal font-fomofont sm:text-[1.4rem]">
               {props.signerAddress ? (
-                <>{props?.currentPot} SOS</>
+                <>{parseInt(props?.currentPot).toFixed(2)} SOS</>
               ) : (
-                <>0.0000 SOS</>
+                <>0.00 SOS</>
               )}
             </h2>
           </div>
@@ -74,11 +74,7 @@ export default function VaultComponet(props) {
           </h3>
           <div className="flex flex-col justify-between items-center sm:text-[1.4rem]">
             <h2 className="flex items-center text-[1.75rem] font-normal font-fomofont sm:text-[1.4rem]">
-              {props.signerAddress ? (
-                <>{props?.affearn} SOS</>
-              ) : (
-                <>0.0000 SOS</>
-              )}
+              {props.signerAddress ? <>{props?.affearn} SOS</> : <>0.00 SOS</>}
             </h2>
           </div>
         </div>
@@ -112,19 +108,16 @@ export default function VaultComponet(props) {
               }}
             >
               {props.signerAddress ? (
-                <>{props?.playerWinnings} SOS</>
+                <>{parseInt(props?.earnings).toFixed(2)} SOS</>
               ) : (
-                <>0.0000 SOS</>
+                <>0.00 SOS</>
               )}
             </h2>
           </div>
         </div>
         <div className="flex justify-end">
           <span className="font-fomofont font-light mt-1 my-2">
-            {props.signerAddress
-              ? (bnbPrice * props.playerWinnings).toFixed(4)
-              : "0"}{" "}
-            USD
+            {props.signerAddress ? bnbPrice * props.playerWinnings : "0"} USD
           </span>
         </div>
         <button

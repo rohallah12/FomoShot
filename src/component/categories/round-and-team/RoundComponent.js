@@ -55,7 +55,7 @@ export default function RoundComponent(props) {
 
           <div className="flex flex-col gap-[5px]">
             <span className="text-xl">
-              {props.signerAddress ? <>{props.currentPot}</> : "loading..."}
+              {props.signerAddress ? <>{parseInt(props.currentPot).toFixed(2)}</> : "loading..."}
             </span>
             <span className="font-light text-base">
               {props.signerAddress
@@ -72,7 +72,7 @@ export default function RoundComponent(props) {
           <div className="flex flex-col justify-between items-center">
             <h2 className="flex items-center text-3xl sm:text-[1.3rem] font-fomofont">
               {props.signerAddress ? (
-                <>{props.playerKeys}</>
+                <>{parseInt(props.playerKeys).toFixed(2)}</>
               ) : (
                 <>
                   0.00 <FaKey className="ml-2 text-3xl" />
@@ -82,8 +82,8 @@ export default function RoundComponent(props) {
             <span className="font-light flex">
               <div className="pr-1">Total</div>
               <div className="">
-                {props.signerAddress ? props.playerKeys : "0"}
-                Keys
+                {props.signerAddress ? parseInt(props.playerKeys).toFixed(0) : "0"}
+                <span className="ml-1">Keys</span>
               </div>
             </span>
           </div>
@@ -95,10 +95,10 @@ export default function RoundComponent(props) {
           <div className="flex flex-col justify-between items-center">
             <h2 className="flex items-center text-3xl sm:text-[1.3rem] font-fomofont">
               {props.signerAddress ? (
-                <>{props.playerWinnings}</>
+                <>{parseInt(props.playerWinnings).toFixed(2)}</>
               ) : (
                 <>
-                  0.0000{" "}
+                  0.00{" "}
                   <img
                     src="/images/bnbiconhq.png"
                     className="h-8 ml-2"

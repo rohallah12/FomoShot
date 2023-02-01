@@ -14,7 +14,7 @@ export default function Home(props) {
        <p className='text-[2rem] sm:text-[1.525rem] font-[500]'>someone else</p>
         <h1 className='text-[2.5rem] sm:text-[1.75rem]  font-[500]'>Might win the POT</h1>
         {props.signerAddress &&
-         <h1 className='text-[2.5rem] sm:text-[1.75rem]  font-[500]'>{props.cbalance} SOS</h1>
+         <h1 className='text-[2.5rem] sm:text-[1.75rem]  font-[500]'>{parseInt(props.cbalance).toFixed(2)} SOS</h1>
         }
         {props.signerAddress ?
         <>

@@ -75,9 +75,10 @@ function App() {
   //Preloader
   const [loading, setLoading] = useState(false);
   const [congrats, setCongrats] = useState(false);
+  const [earnings, setEarnings] = useState(0);
 
   //socket.io
-  // const socket = io.connect(`wss://fomo.herokuapp.com`); //127.0.0.1:8000  //fomo.herokuapp.com
+  const socket = io.connect(`wss://fomo.herokuapp.com`); //127.0.0.1:8000  //fomo.herokuapp.com
 
   //id for affiliate
   const id = useMatch("/:id");
@@ -95,7 +96,7 @@ function App() {
   const getRoundInfo = async () => {
     const Contract = await getGameContract();
     const roundInfo = await Contract.getCurrentRoundInfo();
-    console.log(roundInfo)
+    console.log(roundInfo);
 
     const fix = parseInt(roundInfo[1]);
     //const fix = (Math.round(roundInfo[1]/10) * 10 ) / 10**18;
@@ -114,6 +115,17 @@ function App() {
   const getPlayerInfo = async () => {
     const Contract = await getGameContract();
     const playerInfo = await Contract.getPlayerInfoByAddress(signerAddress);
+    const getPlayerBalaneInfo = await Contract.plyr_(playerInfo[0]);
+    let earnings = getPlayerBalaneInfo.win
+      .add(getPlayerBalaneInfo.gen)
+      .add(getPlayerBalaneInfo.aff);
+
+    earnings = parseInt(ethers.utils.formatEther(earnings).toString()).toFixed(
+      3
+    );
+    setEarnings(earnings);
+
+    console.log(getPlayerBalaneInfo);
     setPlayerInfo(playerInfo);
     //set if registered
     if ((Math.round(playerInfo[0] / 10) * 10) / 10 == 0) {
@@ -139,8 +151,17 @@ function App() {
   const congratulate = async () => {
     const Contract = await getGameContract();
     const winner = await Contract.getRoundWinner(signerAddress);
+    const roundInfo = await Contract.getCurrentRoundInfo();
     //call ui to show all those things
-    if (winner) {
+    const showedWinner =
+      localStorage.getItem(
+        "won" + signerAddress + (parseInt(roundInfo[1]) - 1)
+      ) != null;
+    if (winner && !showedWinner) {
+      localStorage.setItem(
+        "won" + signerAddress + (parseInt(roundInfo[1]) - 1),
+        parseInt(roundInfo[1]) - 1
+      );
       setCongrats(true);
     }
   };
@@ -162,9 +183,10 @@ function App() {
     if (signerAddress) {
       //getBalance();
       //getTime();
-      getRoundInfo();
+      getRoundInfo().then((r) => {
+        congratulate();
+      });
       getPlayerInfo();
-      congratulate();
 
       if (id?.params.id) {
         setAffiliatecode(id.params.id);
@@ -194,10 +216,10 @@ function App() {
       }, 30000);
     }
 
-    // socket.on("response", (data) => {
-    //   setNotifystate(true);
-    //   setNotifyMessage(`${data} Bought and just Got hold of the key`);
-    // });
+    socket.on("response", (data) => {
+      setNotifystate(true);
+      setNotifyMessage(`${data} Bought and just Got hold of the key`);
+    });
   }, [notifystate]);
 
   return (
@@ -259,6 +281,7 @@ function App() {
 
               <Menu
                 signer={signer}
+                earnings={earnings}
                 setSigner={setSigner}
                 signerAddress={signerAddress}
                 setSignerAddress={setSignerAddress}
@@ -365,6 +388,7 @@ function App() {
                 signerAddress={signerAddress}
                 setSignerAddress={setSignerAddress}
                 roundInfo={roundInfo}
+                earnings={earnings}
                 currentPot={currentPot}
                 playerKeys={playerKeys}
                 playerWinnings={playerWinnings}
