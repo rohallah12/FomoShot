@@ -93,21 +93,33 @@ const PurchaseComponet = (props) => {
         );
         await approve.wait(1);
       }
+      console.log("this is main price : " + mainPrice);
+      console.log("this keys count : " + keystb);
 
-      const payforKey = await contractInstance.transferSOS(fees);
+      const toBePaid = ethers.utils.parseEther((mainPrice * keystb).toString());
+      console.log(mainPrice * keystb);
+      console.log("to be paid : " + toBePaid);
+      
+      const payforKey = await contractInstance.transferSOS(toBePaid);
+      console.log("here");
       await payforKey.wait(1);
-
+      console.log("for buy x id " + toBePaid);
       if (props.affcode) {
-        const buy = await contractInstance.buyXid(props.affcode, fees, keys, {
-          gasLimit: 1000000,
-          nonce: 105 || undefined,
-        });
+        const buy = await contractInstance.buyXid(
+          props.affcode,
+          toBePaid,
+          keys,
+          {
+            gasLimit: 1000000,
+            nonce: 105 || undefined,
+          }
+        );
         await buy.wait();
         socket.emit("message", props.signerAddress);
       } else {
         const affcode = 100000000000;
 
-        const buy = await contractInstance.buyXid(affcode, fees, keys, {
+        const buy = await contractInstance.buyXid(affcode, toBePaid, keys, {
           gasLimit: 1000000,
           nonce: 105 || undefined,
         });
@@ -140,10 +152,32 @@ const PurchaseComponet = (props) => {
     const Contract = await getGameContract();
     const boughtbnb = await Contract.getBuyp();
     const setPrice = ((Math.round(boughtbnb / 10) * 10) / 10 ** 18).toFixed(4);
+    const roundInfo = await Contract.getCurrentRoundInfo();
     setBNBPrice(setPrice);
     setBnbBought(setPrice);
-    setMainPrice(setPrice);
+    setMainPrice(
+      calculateKeyPrice(parseInt(ethers.utils.formatEther(roundInfo[2])))
+    );
   };
+
+  const calculateKeyPrice = (keyCount) => {
+    const initialPrice = 600000;
+    const nowPrice = compound(initialPrice, 1 / 100, keyCount);
+    return nowPrice;
+  };
+
+  function compound(principal, ratio, n) {
+    while (n > 0) {
+      if (n % 2 == 1) {
+        principal += principal * ratio;
+        n -= 1;
+      } else {
+        ratio = 2 * ratio + ratio * ratio;
+        n /= 2;
+      }
+    }
+    return principal;
+  }
 
   const setValue = (e) => {
     //setInputValue(e.target.value);
